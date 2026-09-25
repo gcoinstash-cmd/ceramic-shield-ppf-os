@@ -1,56 +1,70 @@
 import React, { useState } from 'react';
 import { 
-  Shield, Award, CheckCircle2, Sparkles, Lock, ArrowRight, Check, 
-  Layers, Gauge, Car, AlertTriangle, FileCheck, Thermometer, Search
+  Shield, Award, ArrowRight, ArrowLeft, Calendar, DollarSign, Lock, 
+  ChevronRight, CheckCircle2, Sparkles, Layers, Terminal, Server,
+  AlertCircle, Check, Phone, Plane, Thermometer, Compass, Fuel, Gauge,
+  Car, CheckSquare, Wrench, Star, ShieldAlert
 } from 'lucide-react';
 import { AdminPortalModal } from './AdminPortalModal.tsx';
 
-type VehicleType = 'coupe' | 'sedan' | 'suv' | 'exotic';
-
-interface Zone {
+interface PPFPackage {
   id: string;
   name: string;
-  price: number;
-  coverage: string;
-  recommended: boolean;
+  basePrice: number;
+  coverage: string[];
+  filmThickness: string;
+  warrantyYears: number;
 }
 
-const ZONES: Record<VehicleType, Zone[]> = {
-  coupe: [
-    { id: 'front-bumper', name: 'Front Bumper & Grille', price: 750, coverage: 'High-Velocity Rock Impact Zone', recommended: true },
-    { id: 'full-hood', name: 'Full Extended Hood', price: 900, coverage: 'Full Wrapped Edges // Zero Seams', recommended: true },
-    { id: 'front-fenders', name: 'Dual Front Fenders', price: 650, coverage: 'Flush Fitment around Headlights', recommended: true },
-    { id: 'mirrors-rockers', name: 'Side Mirrors & Rocker Panels', price: 850, coverage: 'Rear Tire Debris Guard (10mil)', recommended: true },
-    { id: 'rear-fenders', name: 'Widebody Rear Fenders', price: 700, coverage: 'Quarter Panel Flared Sections', recommended: false },
-    { id: 'roof-luggage', name: 'Roof & A-Pillars', price: 800, coverage: 'Bird Dropping & UV Sun Shield', recommended: false },
-  ],
-  sedan: [
-    { id: 'front-bumper', name: 'Front Bumper & Splitter', price: 800, coverage: 'Front End Stone Chip Shield', recommended: true },
-    { id: 'full-hood', name: 'Full Hood (Full Sheet)', price: 950, coverage: 'Wrapped Perimeter Edge Sealing', recommended: true },
-    { id: 'front-fenders', name: 'Front Quarter Fenders', price: 700, coverage: 'Sensor & Emblem Precision Cut', recommended: true },
-    { id: 'mirrors-rockers', name: 'Rocker Panels & Door Sills', price: 900, coverage: 'Foot Scuff & Highway Sand Guard', recommended: true },
-    { id: 'doors-rear', name: 'Full 4-Door Shell Coverage', price: 1800, coverage: 'Parking Lot Door Ding Barrier', recommended: false },
-    { id: 'rear-bumper', name: 'Rear Bumper & Trunk Deck', price: 750, coverage: 'Luggage Loading Scratch Armor', recommended: false },
-  ],
-  suv: [
-    { id: 'front-bumper', name: 'Oversized Front Fascia', price: 950, coverage: 'Heavy Impact Off-Road Armor', recommended: true },
-    { id: 'full-hood', name: 'Expansive SUV Hood', price: 1100, coverage: 'Full 72-Inch Wide Film Roll', recommended: true },
-    { id: 'front-fenders', name: 'Dual Flared Fenders', price: 800, coverage: 'Wheel Arch Flare Wrap', recommended: true },
-    { id: 'mirrors-rockers', name: 'Lower Rockers & Steps', price: 950, coverage: 'Gravel & Mud Roost Deflector', recommended: true },
-    { id: 'doors-all', name: 'Complete 4-Door Lower halves', price: 1600, coverage: 'Family Utility Protection', recommended: false },
-    { id: 'rear-liftgate', name: 'Rear Gate & Loading Sill', price: 850, coverage: 'Cargo Drag & Bumper Defense', recommended: false },
-  ],
-  exotic: [
-    { id: 'front-bumper', name: 'Aerodynamic Carbon Splitter & Bumper', price: 1200, coverage: 'Custom Hand-Trimmed No-Relief', recommended: true },
-    { id: 'full-hood', name: 'Clamshell Front Frunk / Hood', price: 1400, coverage: 'Seamless Single-Piece Monocoque', recommended: true },
-    { id: 'front-fenders', name: 'Louvred Carbon Fenders', price: 1100, coverage: 'Vent Intake Wrapped Liners', recommended: true },
-    { id: 'mirrors-rockers', name: 'Staggered Rockers & Side Pods', price: 1300, coverage: 'Turbine Air Scoop Defense (10mil)', recommended: true },
-    { id: 'rear-quarters', name: 'Engine Bay Deck & Rear Hips', price: 1500, coverage: 'High-Heat Thermal Film Guard', recommended: true },
-    { id: 'active-wing', name: 'Active Aero Carbon Wing & Diffuser', price: 950, coverage: 'Downforce Surface Ceramic Shield', recommended: false },
-  ]
-};
+const PACKAGES: PPFPackage[] = [
+  {
+    id: "TRACK-PACK",
+    name: "Track Pack & High-Impact Zone",
+    basePrice: 2450,
+    coverage: ["Full Hood", "Front Bumper", "Fenders", "Mirror Caps", "Rocker Panels", "Rear Splash Guards"],
+    filmThickness: "8.5 Mil Self-Healing Urethane",
+    warrantyYears: 10
+  },
+  {
+    id: "FULL-BODY-GLOSS",
+    name: "Full Body Gloss Armor",
+    basePrice: 6200,
+    coverage: ["100% Painted Exterior Panels", "Door Edges & Cups", "Headlights & Taillights", "A-Pillars & Roof Front"],
+    filmThickness: "10.0 Mil Hydrophobic Ultra-Gloss",
+    warrantyYears: 12
+  },
+  {
+    id: "STEALTH-SATIN",
+    name: "Full Body Stealth Satin Conversion",
+    basePrice: 7400,
+    coverage: ["100% Painted Exterior (Satin Finish)", "Carbon Fiber Clear Protection", "Door Shuts & Inner Sills"],
+    filmThickness: "10.0 Mil Satin-Matte Self-Healing",
+    warrantyYears: 12
+  }
+];
 
 export default function App() {
+  const [step, setStep] = useState<number>(1);
+  
+  // Step 1: Vehicle Make & Model
+  const [vehicleMake, setVehicleMake] = useState('Porsche');
+  const [vehicleModel, setVehicleModel] = useState('911 GT3 RS (992)');
+  const [vehicleYear, setVehicleYear] = useState('2024');
+  const [paintCondition, setPaintCondition] = useState('Brand New Delivery (< 500 Miles)');
+
+  // Step 2: Coverage Package
+  const [selectedPkg, setSelectedPkg] = useState<PPFPackage>(PACKAGES[0]);
+
+  // Step 3: Add-on Coatings
+  const [ceramicCoating, setCeramicCoating] = useState(true); // +$950
+  const [wheelOffCoating, setWheelOffCoating] = useState(true); // +$450
+  const [windshieldArmor, setWindshieldArmor] = useState(false); // +$650
+
+  // Step 4: Booking Details
+  const [clientName, setClientName] = useState('Alexander Vance');
+  const [targetDate, setTargetDate] = useState('2026-10-18');
+  const [bookedSuccess, setBookedSuccess] = useState(false);
+
   const [isAdminOpen, setIsAdminOpen] = useState(
     typeof window !== 'undefined' && (
       window.location.search.includes('admin') || 
@@ -59,400 +73,358 @@ export default function App() {
     )
   );
 
-  const [vehicle, setVehicle] = useState<VehicleType>('exotic');
-  const [selectedZones, setSelectedZones] = useState<string[]>([
-    'front-bumper', 'full-hood', 'front-fenders', 'mirrors-rockers'
-  ]);
-  const [paintCorrectionStage, setPaintCorrectionStage] = useState<1 | 2 | 3>(2);
-  const [ceramicCoatingLayers, setCeramicCoatingLayers] = useState<1 | 2 | 4>(2);
-  const [warrantyVin, setWarrantyVin] = useState('');
-  const [warrantyResult, setWarrantyResult] = useState<string | null>(null);
-  const [inquiryName, setInquiryName] = useState('');
-  const [inquiryPhone, setInquiryPhone] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-
-  // Toggle zones
-  const toggleZone = (id: string) => {
-    if (selectedZones.includes(id)) {
-      setSelectedZones(selectedZones.filter(z => z !== id));
-    } else {
-      setSelectedZones([...selectedZones, id]);
-    }
-  };
-
-  // Calculations
-  const currentZones = ZONES[vehicle];
-  const ppfBaseTotal = selectedZones.reduce((sum, zId) => {
-    const found = currentZones.find(z => z.id === zId);
-    return sum + (found ? found.price : 0);
-  }, 0);
-
-  const correctionPrice = paintCorrectionStage === 1 ? 450 : paintCorrectionStage === 2 ? 850 : 1450;
-  const ceramicPrice = ceramicCoatingLayers === 1 ? 650 : ceramicCoatingLayers === 2 ? 1150 : 1950;
-  const grandTotal = ppfBaseTotal + correctionPrice + ceramicPrice;
-
-  const handleWarrantySearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!warrantyVin) return;
-    setWarrantyResult(
-      `✓ ACTIVE CERTIFICATE: VIN-${warrantyVin.toUpperCase().slice(-6) || '789421'} // XPEL ULTIMATE PLUS // INSTALLED 2026 // 10-YEAR CARFAX VERIFIED`
-    );
-  };
-
-  const handleBooking = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inquiryName || !inquiryPhone) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setInquiryName('');
-      setInquiryPhone('');
-    }, 4000);
+  const calculateTotal = () => {
+    let total = selectedPkg.basePrice;
+    if (ceramicCoating) total += 950;
+    if (wheelOffCoating) total += 450;
+    if (windshieldArmor) total += 650;
+    return total;
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-400">
-      {/* Precision Floating Top Pill Nav */}
-      <nav className="fixed top-4 inset-x-0 z-50 max-w-5xl mx-auto px-4">
-        <div className="bg-[#121214]/90 backdrop-blur-xl border border-cyan-500/30 rounded-2xl px-5 py-3 flex items-center justify-between shadow-2xl">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-zinc-950 font-bold shadow-md shadow-cyan-500/20">
-              <Shield className="w-4 h-4 text-zinc-950" />
-            </div>
-            <div>
-              <span className="text-xs font-semibold tracking-wider font-mono uppercase tracking-widest text-cyan-400 font-bold block leading-none">AURA & GRID AUTOMOTIVE</span>
-              <span className="text-sm font-extrabold tracking-tight text-white leading-none">CERAMIC SHIELD & PPF OS</span>
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#0A0A0C] text-zinc-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-black">
+      {/* Top Telemetry Header */}
+      <header className="border-b border-zinc-800 bg-[#0E0F14] px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-30 font-mono text-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="font-bold tracking-wider text-emerald-400 flex items-center gap-2 text-base">
+            <Shield size={18} /> CERAMIC SHIELD // AUTOMOTIVE PPF & COATING COVERAGE WIZARD
+          </span>
+          <span className="text-zinc-600">|</span>
+          <span className="text-zinc-400 uppercase text-xs">ARCHETYPE C: STEPPER WIZARD</span>
+        </div>
 
-          <div className="hidden md:flex items-center gap-6 text-xs font-mono uppercase tracking-wider text-zinc-400">
-            <a href="#configurator" className="hover:text-cyan-400 transition">Interactive Studio</a>
-            <a href="#cure-schedule" className="hover:text-cyan-400 transition">IR Cure Telemetry</a>
-            <a href="#warranty-lookup" className="hover:text-cyan-400 transition">Warranty Vault</a>
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-300">
+            <Award size={14} className="text-emerald-400" />
+            <span>XPEL & SUNTEK CERTIFIED MASTER INSTALLERS</span>
           </div>
-
-          <button
+          <button 
             onClick={() => setIsAdminOpen(true)}
-            className="px-3.5 py-1.5 rounded-xl bg-cyan-500/10 border border-cyan-500/40 hover:bg-cyan-500/20 text-cyan-400 text-xs font-mono transition flex items-center gap-1.5"
+            className="px-3.5 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 rounded-lg text-xs font-mono font-bold transition-all"
           >
-            <Lock className="w-3 h-3" />
-            <span>[ STUDIO PASS ]</span>
+            [ STUDIO ATELIER PASS ]
           </button>
-        </div>
-      </nav>
-
-      {/* Hero Header */}
-      <header className="pt-28 pb-12 px-6 max-w-6xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono mb-4">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>MICRO-M&A PRODUCTION OS // XPEL & CERAMIC PRO CERTIFIED</span>
-        </div>
-        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
-          Precision Paint Protection & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Curing Telemetry</span>
-        </h1>
-        <p className="mt-3 text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto">
-          Multi-stage paint defect removal, self-healing urethane film wrapping, shortwave infrared curing logs, and certified 10-year Carfax warranty registrations.
-        </p>
-
-        {/* Live Lab Specs Ticker */}
-        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto text-left">
-          <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">ACTIVE CURE BAYS</span>
-            <span className="text-base font-bold font-mono text-cyan-400">6 DUST-FREE BAYS</span>
-          </div>
-          <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">IR BAKING TARGET</span>
-            <span className="text-base font-bold font-mono text-cyan-400">160°F CONSTANT</span>
-          </div>
-          <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">WARRANTIES LOGGED</span>
-            <span className="text-base font-bold font-mono text-cyan-400">1,420 CERTIFICATES</span>
-          </div>
-          <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">PAINT CLEARANCE</span>
-            <span className="text-base font-bold font-mono text-cyan-400">99.8% DEFECT-FREE</span>
-          </div>
         </div>
       </header>
 
-      {/* Main Interactive Studio Configurator */}
-      <section id="configurator" className="py-8 px-6 max-w-6xl mx-auto">
-        <div className="bg-[#121214] border border-cyan-500/20 rounded-3xl p-6 sm:p-8 shadow-2xl">
-          <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-zinc-800 gap-4">
-            <div>
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block">STEP 1: VEHICLE PLATFORM</span>
-              <h2 className="text-xl sm:text-2xl font-bold text-white">Select Vehicle Form Factor</h2>
+      {/* Main Container */}
+      <main className="flex-1 max-w-4xl mx-auto w-full p-6 sm:p-8 space-y-8">
+        {/* Stepper Header */}
+        <div className="bg-[#12131A] border border-zinc-800 p-5 sm:p-6 rounded-2xl shadow-xl font-mono">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs uppercase tracking-widest text-emerald-400 font-bold">
+                STAGE {step} OF 4
+              </span>
+              <span className="text-zinc-600">/</span>
+              <span className="text-xs text-zinc-300">
+                {step === 1 && "VEHICLE MAKE, MODEL & CONDITION"}
+                {step === 2 && "PPF COVERAGE ARCHITECTURE"}
+                {step === 3 && "NANO-CERAMIC COATING & ADD-ONS"}
+                {step === 4 && "STUDIO BAY RESERVATION & DEPOSIT"}
+              </span>
             </div>
-
-            {/* Vehicle Type Switcher */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-900 p-1.5 rounded-2xl border border-zinc-800">
-              {(['coupe', 'sedan', 'suv', 'exotic'] as VehicleType[]).map((vt) => (
-                <button
-                  key={vt}
-                  onClick={() => {
-                    setVehicle(vt);
-                    setSelectedZones(['front-bumper', 'full-hood', 'front-fenders', 'mirrors-rockers']);
-                  }}
-                  className={`px-4 py-2 rounded-xl text-xs font-mono uppercase font-bold transition flex items-center justify-center gap-1.5 ${
-                    vehicle === vt ? 'bg-cyan-500 text-zinc-950 shadow-md shadow-cyan-500/30' : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  <Car className="w-3.5 h-3.5" />
-                  <span>{vt}</span>
-                </button>
-              ))}
-            </div>
+            <span className="text-xs font-bold text-emerald-400">{step * 25}% COMPLETE</span>
           </div>
 
-          {/* Interactive Zone Walkaround Selector */}
-          <div className="py-8">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block">STEP 2: HIGH-IMPACT ZONES</span>
-                <h3 className="text-lg font-bold text-white">Vehicle Impact Surface Selector (XPEL Ultimate Plus 8.5mil)</h3>
-              </div>
-              <span className="text-xs font-mono text-zinc-400">Selected: {selectedZones.length} of {currentZones.length} Zones</span>
-            </div>
+          <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
+            <div 
+              className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-300"
+              style={{ width: `${step * 25}%` }}
+            />
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {currentZones.map((zone) => {
-                const isSelected = selectedZones.includes(zone.id);
-                return (
-                  <button
-                    key={zone.id}
-                    onClick={() => toggleZone(zone.id)}
-                    className={`text-left p-4 rounded-2xl border transition relative flex flex-col justify-between ${
-                      isSelected 
-                        ? 'bg-cyan-950/20 border-cyan-500/60 shadow-lg shadow-cyan-950/40' 
-                        : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700'
+          {/* Stepper Tabs */}
+          <div className="grid grid-cols-4 gap-2 mt-4 text-xs font-bold text-center">
+            {['1. Vehicle', '2. PPF Package', '3. Coatings', '4. Reserve Bay'].map((label, i) => (
+              <button
+                key={label}
+                onClick={() => setStep(i + 1)}
+                className={`py-1.5 rounded-lg border transition-all ${
+                  step === i + 1 
+                    ? 'border-emerald-500 text-emerald-400 bg-emerald-950/40' 
+                    : i + 1 < step 
+                    ? 'border-zinc-700 text-zinc-300' 
+                    : 'border-zinc-800 text-zinc-600'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Wizard Form Panels */}
+        <div className="bg-[#12131A] border border-zinc-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl">
+          {/* STEP 1: VEHICLE MAKE & MODEL */}
+          {step === 1 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                  <Car className="text-emerald-400" /> Vehicle Profile & Paint Inspection
+                </h2>
+                <p className="text-sm text-zinc-400 mt-1">
+                  Specify the chassis, model year, and factory paint finish condition.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-mono font-bold text-zinc-400 uppercase">Make</label>
+                  <input 
+                    type="text"
+                    value={vehicleMake}
+                    onChange={e => setVehicleMake(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-emerald-400 outline-none min-h-[44px]" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-mono font-bold text-zinc-400 uppercase">Model</label>
+                  <input 
+                    type="text"
+                    value={vehicleModel}
+                    onChange={e => setVehicleModel(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-emerald-400 outline-none min-h-[44px]" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-mono font-bold text-zinc-400 uppercase">Model Year</label>
+                  <input 
+                    type="text"
+                    value={vehicleYear}
+                    onChange={e => setVehicleYear(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-emerald-400 outline-none min-h-[44px]" 
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-mono font-bold text-zinc-400 uppercase">Current Paint Condition</label>
+                <select 
+                  value={paintCondition}
+                  onChange={e => setPaintCondition(e.target.value)}
+                  className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-emerald-400 outline-none min-h-[44px]"
+                >
+                  <option>Brand New Delivery (&lt; 500 Miles)</option>
+                  <option>Light Swirl Marks (1-Stage Paint Correction Required)</option>
+                  <option>Moderate Swirls & Scratches (2-Stage Correction Required)</option>
+                  <option>Factory Matte / Frozen Paint Finish</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2: PPF COVERAGE ARCHITECTURE */}
+          {step === 2 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                  <Shield className="text-emerald-400" /> Paint Protection Film Package Selector
+                </h2>
+                <p className="text-sm text-zinc-400 mt-1">
+                  Select your targeted panel coverage tier. Computer-cut patterns plotted with wrapped edges.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {PACKAGES.map(pkg => (
+                  <div
+                    key={pkg.id}
+                    onClick={() => setSelectedPkg(pkg)}
+                    className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
+                      selectedPkg.id === pkg.id 
+                        ? 'bg-emerald-950/30 border-emerald-500 ring-2 ring-emerald-500/20' 
+                        : 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-700'
                     }`}
                   >
                     <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-bold font-mono text-zinc-200">{zone.name}</span>
-                        {isSelected ? (
-                          <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border border-zinc-700"></div>
-                        )}
+                      <div className="text-xs font-mono text-emerald-400 font-bold uppercase">{pkg.id}</div>
+                      <h3 className="text-lg font-bold text-white mt-1">{pkg.name}</h3>
+                      <div className="text-2xl font-black text-white font-mono mt-2">
+                        ${pkg.basePrice.toLocaleString()}
                       </div>
-                      <p className="text-xs font-semibold text-zinc-400">{zone.coverage}</p>
+                      
+                      <div className="mt-4 space-y-1.5 text-xs text-zinc-300 font-mono">
+                        {pkg.coverage.map(c => (
+                          <div key={c} className="flex items-center gap-1.5">
+                            <Check size={12} className="text-emerald-400 shrink-0" />
+                            <span>{c}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
 
-                    <div className="mt-4 pt-2 border-t border-zinc-800/60 flex items-center justify-between">
-                      <span className="text-xs font-mono font-extrabold text-cyan-400">${zone.price} USD</span>
-                      {zone.recommended && (
-                        <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
-                          RECOMMENDED
-                        </span>
-                      )}
+                    <div className="mt-4 pt-3 border-t border-zinc-800 text-[11px] font-mono text-zinc-400">
+                      <div>Film: {pkg.filmThickness}</div>
+                      <div className="text-emerald-400 font-bold">Warranty: {pkg.warrantyYears} Years</div>
                     </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Paint Correction & Ceramic Coating Sliders */}
-          <div className="pt-6 border-t border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Paint Correction Stage */}
-            <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">STEP 3: SURFACE CORRECTION</span>
-              <h4 className="text-base font-bold text-white mb-2">Jewel Paint Polish Depth</h4>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { stage: 1, label: 'Stage 1', desc: '50% Defect Cut', price: 450 },
-                  { stage: 2, label: 'Stage 2', desc: '85% Dual Cut', price: 850 },
-                  { stage: 3, label: 'Concours', desc: '98% Multi-Jewel', price: 1450 }
-                ].map((s) => (
-                  <button
-                    key={s.stage}
-                    onClick={() => setPaintCorrectionStage(s.stage as any)}
-                    className={`p-3 rounded-xl text-center border transition ${
-                      paintCorrectionStage === s.stage 
-                        ? 'bg-cyan-500 text-zinc-950 border-cyan-400 font-bold shadow-md shadow-cyan-500/20' 
-                        : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700'
-                    }`}
-                  >
-                    <span className="text-xs font-mono block">{s.label}</span>
-                    <span className="text-xs font-semibold tracking-wider block opacity-80">{s.desc}</span>
-                    <span className="text-xs font-mono block mt-1">+${s.price}</span>
-                  </button>
+                  </div>
                 ))}
               </div>
-            </div>
-
-            {/* Ceramic Coating Layers */}
-            <div className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block mb-1">STEP 4: CERAMIC PRO 9H</span>
-              <h4 className="text-base font-bold text-white mb-2">Hydrophobic Nano Armor Layers</h4>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { layers: 1, label: 'Single Layer', desc: '2-Year Beading', price: 650 },
-                  { layers: 2, label: 'Dual Armor', desc: '5-Year Matrix', price: 1150 },
-                  { layers: 4, label: 'Gold 4-Layer', desc: 'Lifetime Bond', price: 1950 }
-                ].map((l) => (
-                  <button
-                    key={l.layers}
-                    onClick={() => setCeramicCoatingLayers(l.layers as any)}
-                    className={`p-3 rounded-xl text-center border transition ${
-                      ceramicCoatingLayers === l.layers 
-                        ? 'bg-cyan-500 text-zinc-950 border-cyan-400 font-bold shadow-md shadow-cyan-500/20' 
-                        : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700'
-                    }`}
-                  >
-                    <span className="text-xs font-mono block">{l.label}</span>
-                    <span className="text-xs font-semibold tracking-wider block opacity-80">{l.desc}</span>
-                    <span className="text-xs font-mono block mt-1">+${l.price}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Pricing Summary & Checkout Drawer Bar */}
-          <div className="mt-8 p-6 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-zinc-900 to-zinc-900 border border-cyan-500/40 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block">CUSTOM CONFIGURATION TOTAL</span>
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl sm:text-4xl font-extrabold font-mono text-white">${grandTotal.toLocaleString()} USD</span>
-                <span className="text-xs font-mono text-zinc-400">Includes Film + Lab Prep + IR Cure</span>
-              </div>
-            </div>
-
-            <form onSubmit={handleBooking} className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-              <input
-                type="text"
-                required
-                value={inquiryName}
-                onChange={(e) => setInquiryName(e.target.value)}
-                placeholder="Full Name"
-                className="px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs font-sans text-white focus:outline-none focus:border-cyan-500"
-              />
-              <input
-                type="tel"
-                required
-                value={inquiryPhone}
-                onChange={(e) => setInquiryPhone(e.target.value)}
-                placeholder="Phone (SMS Quote)"
-                className="px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs font-sans text-white focus:outline-none focus:border-cyan-500"
-              />
-              <button
-                type="submit"
-                className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-base font-semibold min-h-[44px] uppercase tracking-wider transition whitespace-nowrap"
-              >
-                {submitted ? '✓ RESERVATION QUEUED' : 'BOOK CURE BAY'}
-              </button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      {/* IR Shortwave Curing Schedule Telemetry */}
-      <section id="cure-schedule" className="py-12 px-6 max-w-6xl mx-auto">
-        <div className="border-t border-zinc-800 pt-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
-            <div>
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest block">LAB MONITORING // PROTOCOL B</span>
-              <h3 className="text-xl font-bold text-white">Automated Infrared Curing Telemetry</h3>
-            </div>
-            <span className="text-xs font-mono text-emerald-400 mt-2 sm:mt-0 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              ALL 6 BAYS OPERATING AT SPECS
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800">
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-2">
-                <span>BAY 01 // XPEL STEALTH</span>
-                <span className="text-cyan-400 font-bold">160°F / 45 MINS</span>
-              </div>
-              <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
-                <div className="bg-cyan-500 h-full w-[88%]"></div>
-              </div>
-              <span className="text-xs font-semibold tracking-wider text-zinc-300 font-mono mt-2 block">Phase: Edge Seal Polymerization</span>
-            </div>
-
-            <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800">
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-2">
-                <span>BAY 03 // CERAMIC 9H</span>
-                <span className="text-cyan-400 font-bold">145°F / 60 MINS</span>
-              </div>
-              <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
-                <div className="bg-cyan-500 h-full w-[64%]"></div>
-              </div>
-              <span className="text-xs font-semibold tracking-wider text-zinc-300 font-mono mt-2 block">Phase: Cross-Link Hydrophobic Bake</span>
-            </div>
-
-            <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800">
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-400 mb-2">
-                <span>BAY 05 // PORSCHE GT3 RS</span>
-                <span className="text-cyan-400 font-bold">160°F / COMPLETED</span>
-              </div>
-              <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
-                <div className="bg-emerald-400 h-full w-[100%]"></div>
-              </div>
-              <span className="text-xs font-semibold tracking-wider text-zinc-300 font-mono mt-2 block">Phase: Ready for Final Handover</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Digital Warranty Certificate Lookup Vault */}
-      <section id="warranty-lookup" className="py-12 px-6 max-w-4xl mx-auto">
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#121214] border border-zinc-800 text-center">
-          <FileCheck className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
-          <h3 className="text-xl font-bold text-white">Carfax Verified 10-Year Warranty Lookup</h3>
-          <p className="text-base text-zinc-200 leading-relaxed max-w-md mx-auto mt-1 mb-6">
-            Enter vehicle VIN or serial certificate ID to view authenticated film lot number, installer credentials, and transfer history.
-          </p>
-
-          <form onSubmit={handleWarrantySearch} className="flex gap-2 max-w-md mx-auto">
-            <input
-              type="text"
-              required
-              value={warrantyVin}
-              onChange={(e) => setWarrantyVin(e.target.value)}
-              placeholder="Enter VIN (e.g. WP0AB2A99NS...)"
-              className="flex-1 px-4 py-2.5 bg-zinc-950 border border-zinc-700 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-cyan-500"
-            />
-            <button
-              type="submit"
-              className="px-5 py-3 min-h-[44px].5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-base font-semibold min-h-[44px] font-mono uppercase"
-            >
-              Verify
-            </button>
-          </form>
-
-          {warrantyResult && (
-            <div className="mt-4 p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/40 text-xs font-mono text-cyan-300">
-              {warrantyResult}
             </div>
           )}
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-6 border-t border-zinc-800 bg-[#0A0A0B] text-zinc-300 text-xs font-mono">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <span className="text-zinc-300 font-bold">CERAMIC SHIELD & PPF OS</span> • Turnkey Restyling OS v1.0.0
-          </div>
-          <div className="flex items-center gap-6">
-            <span>Ghost Factory™ Protocol</span>
-            <span>Supabase RLS Enforced</span>
-            <button
-              onClick={() => setIsAdminOpen(true)}
-              className="text-cyan-400 hover:underline"
-            >
-              Admin Portal (ceramic2026)
-            </button>
+          {/* STEP 3: NANO-CERAMIC COATING & ADD-ONS */}
+          {step === 3 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                  <Sparkles className="text-emerald-400" /> Ceramic Topcoat & Specialized Glass Armor
+                </h2>
+                <p className="text-sm text-zinc-400 mt-1">
+                  Layer 9H hydrophobic ceramic protection over the film for extreme slickness and ease of maintenance.
+                </p>
+              </div>
+
+              <div className="space-y-3 font-mono text-xs">
+                {[
+                  {
+                    title: "9H Ceramic Coating Over Entire PPF Film",
+                    price: 950,
+                    state: ceramicCoating,
+                    toggle: () => setCeramicCoating(!ceramicCoating),
+                    desc: "Dual-layer hydrophobic coating enhancing self-cleaning and chemical resistance."
+                  },
+                  {
+                    title: "Wheels-Off Ceramic Caliper & Barrel Coating",
+                    price: 450,
+                    state: wheelOffCoating,
+                    toggle: () => setWheelOffCoating(!wheelOffCoating),
+                    desc: "Full dismount of wheels; ceramic coating applied to barrels, faces, and brake calipers."
+                  },
+                  {
+                    title: "ClearPlex Windshield Impact Protection Film",
+                    price: 650,
+                    state: windshieldArmor,
+                    toggle: () => setWindshieldArmor(!windshieldArmor),
+                    desc: "Exterior optically clear multi-layer barrier protecting windshield from rock chips."
+                  }
+                ].map(addon => (
+                  <div
+                    key={addon.title}
+                    onClick={addon.toggle}
+                    className={`p-4 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
+                      addon.state 
+                        ? 'bg-emerald-950/20 border-emerald-500/60 text-zinc-200' 
+                        : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded flex items-center justify-center border ${
+                        addon.state ? 'bg-emerald-500 border-emerald-400 text-black' : 'border-zinc-700 bg-black'
+                      }`}>
+                        {addon.state && <Check size={14} className="stroke-[3]" />}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">{addon.title}</div>
+                        <div className="text-[11px] text-zinc-400">{addon.desc}</div>
+                      </div>
+                    </div>
+                    <div className="text-base font-black text-emerald-400 font-mono">
+                      +${addon.price}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Price Tally HUD */}
+              <div className="p-5 bg-black/80 border border-emerald-500/40 rounded-xl flex justify-between items-center font-mono">
+                <div>
+                  <span className="text-xs text-zinc-400 uppercase">Estimated Build Price</span>
+                  <div className="text-3xl font-black text-emerald-400 mt-0.5">
+                    ${calculateTotal().toLocaleString()} USD
+                  </div>
+                </div>
+                <div className="text-right text-xs text-zinc-400">
+                  <div>10% Deposit Required: <strong className="text-white">${Math.round(calculateTotal() * 0.1)}</strong></div>
+                  <div>Bay Turnaround: <strong className="text-white">3-4 Studio Days</strong></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: STUDIO BAY RESERVATION & DEPOSIT */}
+          {step === 4 && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                  <Calendar className="text-emerald-400" /> Studio Bay Intake & Appointment Schedule
+                </h2>
+                <p className="text-sm text-zinc-400 mt-1">
+                  Lock in your dedicated cleanroom installation bay at our climate-controlled studio.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-mono font-bold text-zinc-400 uppercase">Client Full Name</label>
+                  <input 
+                    type="text"
+                    value={clientName}
+                    onChange={e => setClientName(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-emerald-400 outline-none min-h-[44px]" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-mono font-bold text-zinc-400 uppercase">Target Drop-Off Date</label>
+                  <input 
+                    type="date"
+                    value={targetDate}
+                    onChange={e => setTargetDate(e.target.value)}
+                    className="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-emerald-400 outline-none min-h-[44px]" 
+                  />
+                </div>
+              </div>
+
+              {/* Order Summary Confirmation Card */}
+              <div className="bg-black/80 border border-zinc-800 p-5 rounded-xl font-mono text-xs space-y-2 text-zinc-300">
+                <div className="text-emerald-400 font-bold uppercase tracking-wider pb-2 border-b border-zinc-800 flex justify-between">
+                  <span>CLEANROOM INTAKE CERTIFICATE // PPF-{Math.floor(Math.random()*8999)+1000}</span>
+                  <span className="text-white">STATUS: DRAFT</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <div>Vehicle: <strong className="text-white">{vehicleYear} {vehicleMake} {vehicleModel}</strong></div>
+                  <div>Condition: <strong className="text-white">{paintCondition.split('(')[0]}</strong></div>
+                  <div>PPF Package: <strong className="text-emerald-400">{selectedPkg.name}</strong></div>
+                  <div>Ceramic Coating: <strong className="text-white">{ceramicCoating ? 'Yes (9H)' : 'No'}</strong></div>
+                  <div>Wheel Caliper Coat: <strong className="text-white">{wheelOffCoating ? 'Yes' : 'No'}</strong></div>
+                  <div>Total Investment: <strong className="text-emerald-400 font-black text-sm">${calculateTotal().toLocaleString()} USD</strong></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Stepper Navigation Buttons */}
+          <div className="flex justify-between items-center pt-6 border-t border-zinc-800 font-mono">
+            {step > 1 ? (
+              <button
+                onClick={() => setStep(step - 1)}
+                className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold rounded-xl flex items-center gap-2 text-sm transition-all min-h-[44px]"
+              >
+                <ArrowLeft size={16} /> Back
+              </button>
+            ) : <div />}
+
+            {step < 4 ? (
+              <button
+                onClick={() => setStep(step + 1)}
+                className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl flex items-center gap-2 text-sm transition-all shadow-lg shadow-emerald-500/20 min-h-[44px]"
+              >
+                Continue to Stage {step + 1} <ArrowRight size={16} />
+              </button>
+            ) : (
+              <button
+                onClick={() => setBookedSuccess(true)}
+                className="px-8 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-xl flex items-center gap-2 text-sm transition-all shadow-lg shadow-emerald-500/30 min-h-[44px]"
+              >
+                {bookedSuccess ? '✓ CLEANROOM BAY RESERVED' : 'LOCK IN STUDIO RESERVATION & DEPOSIT'}
+              </button>
+            )}
           </div>
         </div>
-      </footer>
+      </main>
 
-      {/* Admin Modal */}
       <AdminPortalModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
     </div>
   );

@@ -120,7 +120,7 @@ export default function App() {
               <Shield className="w-4 h-4 text-zinc-950" />
             </div>
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 font-bold block leading-none">AURA & GRID AUTOMOTIVE</span>
+              <span className="text-xs font-semibold tracking-wider font-mono uppercase tracking-widest text-cyan-400 font-bold block leading-none">AURA & GRID AUTOMOTIVE</span>
               <span className="text-sm font-extrabold tracking-tight text-white leading-none">CERAMIC SHIELD & PPF OS</span>
             </div>
           </div>
@@ -157,19 +157,19 @@ export default function App() {
         {/* Live Lab Specs Ticker */}
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto text-left">
           <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-[10px] font-mono text-zinc-500 uppercase block">ACTIVE CURE BAYS</span>
+            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">ACTIVE CURE BAYS</span>
             <span className="text-base font-bold font-mono text-cyan-400">6 DUST-FREE BAYS</span>
           </div>
           <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-[10px] font-mono text-zinc-500 uppercase block">IR BAKING TARGET</span>
+            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">IR BAKING TARGET</span>
             <span className="text-base font-bold font-mono text-cyan-400">160°F CONSTANT</span>
           </div>
           <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-[10px] font-mono text-zinc-500 uppercase block">WARRANTIES LOGGED</span>
+            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">WARRANTIES LOGGED</span>
             <span className="text-base font-bold font-mono text-cyan-400">1,420 CERTIFICATES</span>
           </div>
           <div className="p-3 rounded-xl bg-zinc-900/60 border border-zinc-800">
-            <span className="text-[10px] font-mono text-zinc-500 uppercase block">PAINT CLEARANCE</span>
+            <span className="text-xs font-semibold tracking-wider font-mono text-zinc-300 uppercase block">PAINT CLEARANCE</span>
             <span className="text-base font-bold font-mono text-cyan-400">99.8% DEFECT-FREE</span>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function App() {
                           <div className="w-4 h-4 rounded-full border border-zinc-700"></div>
                         )}
                       </div>
-                      <p className="text-[11px] text-zinc-400">{zone.coverage}</p>
+                      <p className="text-xs font-semibold text-zinc-400">{zone.coverage}</p>
                     </div>
 
                     <div className="mt-4 pt-2 border-t border-zinc-800/60 flex items-center justify-between">
@@ -275,7 +275,7 @@ export default function App() {
                     }`}
                   >
                     <span className="text-xs font-mono block">{s.label}</span>
-                    <span className="text-[10px] block opacity-80">{s.desc}</span>
+                    <span className="text-xs font-semibold tracking-wider block opacity-80">{s.desc}</span>
                     <span className="text-xs font-mono block mt-1">+${s.price}</span>
                   </button>
                 ))}
@@ -302,7 +302,7 @@ export default function App() {
                     }`}
                   >
                     <span className="text-xs font-mono block">{l.label}</span>
-                    <span className="text-[10px] block opacity-80">{l.desc}</span>
+                    <span className="text-xs font-semibold tracking-wider block opacity-80">{l.desc}</span>
                     <span className="text-xs font-mono block mt-1">+${l.price}</span>
                   </button>
                 ))}
@@ -339,7 +339,7 @@ export default function App() {
               />
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-xs uppercase tracking-wider transition whitespace-nowrap"
+                className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-base font-semibold min-h-[44px] uppercase tracking-wider transition whitespace-nowrap"
               >
                 {submitted ? '✓ RESERVATION QUEUED' : 'BOOK CURE BAY'}
               </button>
@@ -371,7 +371,7 @@ export default function App() {
               <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-cyan-500 h-full w-[88%]"></div>
               </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-2 block">Phase: Edge Seal Polymerization</span>
+              <span className="text-xs font-semibold tracking-wider text-zinc-300 font-mono mt-2 block">Phase: Edge Seal Polymerization</span>
             </div>
 
             <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800">
@@ -382,7 +382,7 @@ export default function App() {
               <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-cyan-500 h-full w-[64%]"></div>
               </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-2 block">Phase: Cross-Link Hydrophobic Bake</span>
+              <span className="text-xs font-semibold tracking-wider text-zinc-300 font-mono mt-2 block">Phase: Cross-Link Hydrophobic Bake</span>
             </div>
 
             <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800">
@@ -393,7 +393,7 @@ export default function App() {
               <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-emerald-400 h-full w-[100%]"></div>
               </div>
-              <span className="text-[10px] text-zinc-500 font-mono mt-2 block">Phase: Ready for Final Handover</span>
+              <span className="text-xs font-semibold tracking-wider text-zinc-300 font-mono mt-2 block">Phase: Ready for Final Handover</span>
             </div>
           </div>
         </div>
@@ -404,7 +404,7 @@ export default function App() {
         <div className="p-6 sm:p-8 rounded-2xl bg-[#121214] border border-zinc-800 text-center">
           <FileCheck className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-white">Carfax Verified 10-Year Warranty Lookup</h3>
-          <p className="text-xs text-zinc-400 max-w-md mx-auto mt-1 mb-6">
+          <p className="text-base text-zinc-200 leading-relaxed max-w-md mx-auto mt-1 mb-6">
             Enter vehicle VIN or serial certificate ID to view authenticated film lot number, installer credentials, and transfer history.
           </p>
 
@@ -419,7 +419,7 @@ export default function App() {
             />
             <button
               type="submit"
-              className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-xs font-mono uppercase"
+              className="px-5 py-3 min-h-[44px].5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-base font-semibold min-h-[44px] font-mono uppercase"
             >
               Verify
             </button>
@@ -434,7 +434,7 @@ export default function App() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 border-t border-zinc-800 bg-[#0A0A0B] text-zinc-500 text-xs font-mono">
+      <footer className="py-8 px-6 border-t border-zinc-800 bg-[#0A0A0B] text-zinc-300 text-xs font-mono">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="text-zinc-300 font-bold">CERAMIC SHIELD & PPF OS</span> • Turnkey Restyling OS v1.0.0
